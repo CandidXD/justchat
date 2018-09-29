@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/chat.js"></script>
+    <script src="../js/amazeui.min.js"></script>
+    <script src="../layer/layer.js"></script>
+</head>
+<body>
+<div id="test">
+
+</div>
+<button type="button" onclick="return openss();">open</button>
+<button type="button" onclick="return chat();">chat</button>
+<button type="button" onclick="return test();">点击</button>
+</body>
+</html>
+<script type="text/javascript">
+    // localhost = "http://118.25.22.19:8080/";
+    localhost = "http://localhost:8080/";
+
+    function openss() {
+        $.ajax({
+            type: "GET",
+            url: localhost + "chat/open",
+            data: {},
+            success: function (data) {
+            },
+            error: function () {
+            }
+        })
+    }
+
+    function chat() {
+        $.ajax({
+            type: "GET",
+            url: localhost + "chat/chat",
+            data: {},
+            success: function (data) {
+            },
+            error: function () {
+            }
+        })
+    }
+
+
+    function test() {
+        // 创建一个Socket实例
+        var socket = new WebSocket('ws://localhost:8080/websocket/123jd8wjd8ws');
+        // 打开Socket
+        socket.onopen = function (event) {
+            // 发送一个初始化消息
+            socket.send('建立连接');
+            // 监听消息
+            socket.onmessage = function (event) {
+                $('#test').append(event.data);
+            }
+        };
+        // 监听Socket的关闭
+        socket.onclose = function (event) {
+            console.log('Client notified socket has closed', event);
+        };
+    }
+
+</script>
