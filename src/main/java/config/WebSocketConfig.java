@@ -1,6 +1,7 @@
 package config;
 
 import com.candidxd.justchat.socket.WsHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -18,18 +19,14 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
  */
 @Configuration
 @EnableWebSocket
-public class WebSocketConfig implements WebSocketConfigurer
-{
+public class WebSocketConfig implements WebSocketConfigurer {
+    @Autowired
+    private WsHandler wsHandler;
+
     @Override
-    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry)
-    {
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         System.out.println("==========================");
-        registry.addHandler(myHandler(), "/websocket/{uid}").setAllowedOrigins("*");
+        registry.addHandler(wsHandler, "/websocket/{uid}").setAllowedOrigins("*");
     }
 
-    @Bean
-    public WsHandler myHandler()
-    {
-        return new WsHandler();
-    }
 }

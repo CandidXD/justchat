@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
   * @date 2018/9/28 10:02 AM
   * @return
   */
-@SpringBootApplication(scanBasePackages = {"com.candidxd.justchat.controller", "com.candidxd.justchat.service","config","com.candidxd.justchat.logger","com.candidxd.justchat.redis","com.candidxd.justchat.socket"})
+@SpringBootApplication(scanBasePackages = {"com.candidxd.justchat.controller", "com.candidxd.justchat.service", "config", "com.candidxd.justchat.logger", "com.candidxd.justchat.redis", "com.candidxd.justchat.socket", "com.candidxd.justchat.thread"})
 @MapperScan("com.candidxd.justchat.dao")
 @EnableTransactionManagement
 public class JustchatApplication {

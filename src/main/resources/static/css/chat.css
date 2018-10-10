@@ -130,7 +130,11 @@ video {
     right: 0;
 }
 
-.match-sm{
+.match-sm {
+    display: none !important;
+}
+
+.divider-sm {
     display: none !important;
 }
 
@@ -3564,7 +3568,7 @@ body.phone .media-container, body.ifr .media-container {
         background-size: cover
     }
 
-    .match-sm{
+    .match-sm {
         display: none !important;
     }
 
@@ -3605,7 +3609,11 @@ body.phone .media-container, body.ifr .media-container {
         bottom: 20px;
     }
 
-    .match-sm{
+    .divider-sm {
+        display: block !important;
+    }
+
+    .match-sm {
         display: inline-block !important;
     }
 

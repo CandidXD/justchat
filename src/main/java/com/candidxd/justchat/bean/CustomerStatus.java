@@ -16,7 +16,7 @@ public class CustomerStatus {
      */
     private Integer stateId;
     private String loginTime;
-    private Integer customerGender;
+//    private Integer customerGender;
 
     public Integer getId() {
         return id;
@@ -58,13 +58,13 @@ public class CustomerStatus {
         this.loginTime = loginTime;
     }
 
-    public Integer getCustomerGender() {
-        return customerGender;
-    }
-
-    public void setCustomerGender(Integer customerGender) {
-        this.customerGender = customerGender;
-    }
+//    public Integer getCustomerGender() {
+//        return customerGender;
+//    }
+//
+//    public void setCustomerGender(Integer customerGender) {
+//        this.customerGender = customerGender;
+//    }
 
     @Override
     public String toString() {
@@ -72,9 +72,8 @@ public class CustomerStatus {
                 "id=" + id +
                 ", customerUid='" + customerUid + '\'' +
                 ", state='" + state + '\'' +
-                ", stateId='" + stateId + '\'' +
+                ", stateId=" + stateId +
                 ", loginTime='" + loginTime + '\'' +
-                ", customerGender='" + customerGender + '\'' +
                 '}';
     }
 }

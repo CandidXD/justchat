@@ -12,11 +12,11 @@ import java.util.concurrent.*;
  * @date 2018/9/2611:41 AM
  */
 public class ThreadPoolUtil {
+    private static BlockingQueue blockingQueue = new ArrayBlockingQueue<>(10);
+    private static ThreadFactory threadFactory = new DefaultThreadFactory("test");
+    public static ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(10, 20, 100, TimeUnit.MINUTES, blockingQueue, threadFactory);
 
     public static String threadStartCallable(Callable<String> callable) throws InterruptedException, ExecutionException, TimeoutException {
-        BlockingQueue blockingQueue = new ArrayBlockingQueue<>(10);
-        ThreadFactory threadFactory = new DefaultThreadFactory("test");
-        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(10, 20, 1, TimeUnit.MINUTES, blockingQueue, threadFactory);
         Future future = threadPoolExecutor.submit(callable);
         if (future.get(60, TimeUnit.MINUTES) != null) {
             future.isDone();

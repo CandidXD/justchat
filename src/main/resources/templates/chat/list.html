@@ -22,25 +22,28 @@
     <title>Just Chat</title>
     <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="../css/chat.css">
-    <link href="../assets/css/amazeui.css" rel="stylesheet" type="text/css"/>
-    <!--<link rel="stylesheet" href="../assets/css/app.css">-->
-    <script src="../js/jquery.min.js"></script>
+    <!--<link href="../assets/css/amazeui.css" rel="stylesheet" type="text/css"/>-->
+    <link href="http://cdn.amazeui.org/amazeui/2.7.2/css/amazeui.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="../css/style.css">
+    <!--<script src="../js/jquery.min.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="../js/chat.js"></script>
-    <script src="../js/amazeui.min.js"></script>
+    <!--<script src="../js/amazeui.min.js"></script>-->
+    <script src="http://cdn.amazeui.org/amazeui/2.7.2/js/amazeui.min.js"></script>
     <script src="../layer/layer.js"></script>
 </head>
-<body lang="zh">
-<img style="width:100%;height:100%" src="../image/back.jpg">
+<body lang="zh" style="overflow-x:hidden;">
+<!--<img style="width:100%;height:100%" src="../image/back.jpg">-->
 <div class="abs cover contaniner">
     <div class="abs cover pnl">
         <div class="top pnl-head" style="background-image: url(../image/top.jpg)">
 
 
-            <button class="am-btn am-btn-primary match-sm" data-am-collapse="{target: '#collapse-nav'}" style="height: 100%;">匹配
+            <button class="am-btn am-btn-primary match-sm" data-am-collapse="{target: '#collapse-nav'}"
+                    style="height: 100%;background: rgb(20,36,44);border: none;outline: none;">匹配
                 <i class="am-icon-bars"></i></button>
             <nav>
                 <ul id="collapse-nav" class="am-nav am-collapse" style="padding-top: 20px;background: white;">
-
 
 
                     <div class="am-form-group">
@@ -62,19 +65,21 @@
                             </select>
                         </div>
                     </div>
+
                     <div class="am-form-group">
                         <div class="am-u-sm-12 am-margin-top-xs" style="margin-top: 20px;">
                             <button type="button" class="am-btn am-btn-primary am-radius"
                                     id="match-button-sm"
-                                    name="match-button" style="width: 100%;"
+                                    name="match-button-sm" style="width: 100%;display: inline;"
                                     onclick="return match(1);">开始匹配
+                            </button>
+                            <button type="button" class="am-btn am-btn-primary am-radius"
+                                    id="cancel-button-sm"
+                                    name="cancel-button-sm" style="width: 100%;display: none;"
+                                    onclick="return cancelMatch();">取消匹配
                             </button>
                         </div>
                     </div>
-
-
-
-
                 </ul>
             </nav>
 
@@ -99,7 +104,7 @@
                         <div class="fl btns rel pnl-warn-free">
                             <hr data-am-widget="divider"
                                 style="margin-left: .35em;margin-right: .35em;height: 1px;margin-top: 0;margin-bottom: 0;"
-                                class="am-divider am-divider-default"/>
+                                class="am-divider am-divider-default divider-sm"/>
                             <!--<img src="../image/icon/smile.png" class="kh warn-btn" title="表情" id="emojiBtn"/>-->
                             <div class="am-u-sm-12 am-u-md-12" style="padding-left: 0;">
                                 <img src="../image/icon/smile.png" class="kh warn-btn" title="表情" id="emojiBtn"
@@ -168,8 +173,12 @@
                     <div class="am-form-group">
                         <div class="am-u-sm-12 am-margin-top-xs" style="margin-top: 20px;">
                             <button type="button" class="am-btn am-btn-primary am-radius" id="match-button"
-                                    name="match-button" style="width: 100%;"
+                                    name="match-button" style="width: 100%;display: inline;"
                                     onclick="return match(0);">开始匹配
+                            </button>
+                            <button type="button" class="am-btn am-btn-primary am-radius" id="cancel-button"
+                                    name="cancel-button" style="width: 100%;display: none;"
+                                    onclick="return cancelMatch();">取消匹配
                             </button>
                         </div>
                     </div>
@@ -178,5 +187,6 @@
         </div>
     </div>
 </div>
+<img style="height: 100%;`" src="../image/back.jpg">
 </body>
 </html>
