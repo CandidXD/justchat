@@ -1,22 +1,17 @@
 package config;
 
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-
 @Configuration
-public class RedisConfig extends CachingConfigurerSupport {
-    private Logger logger = LoggerFactory.getLogger(RedisConfig.class);
+public class JedisConfig extends CachingConfigurerSupport {
+    private Logger logger = LoggerFactory.getLogger(JedisConfig.class);
 
     /**
      * SpringSession  需要注意的就是redis需要2.8以上版本，然后开启事件通知，在redis配置文件里面加上
@@ -26,7 +21,6 @@ public class RedisConfig extends CachingConfigurerSupport {
      * redis-cli config set notify-keyspace-events Egx
      * 如果你的Redis不是你自己维护的，比如你是使用阿里云的Redis数据库，你不能够更改它的配置，那么可以使用如下方法：在applicationContext.xml中配置
      * <util:constant static-field="org.springframework.session.data.redis.config.ConfigureRedisAction.NO_OP"/>
-     *
      * @return
      */
 
@@ -51,8 +45,6 @@ public class RedisConfig extends CachingConfigurerSupport {
     @Value("${spring.redis.jedis.pool.max-wait}")
     private long maxWaitMillis;
 
-    public RedisConfig() {
-    }
 
 
     @Bean

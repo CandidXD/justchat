@@ -21,64 +21,72 @@ public class Customer {
         return id;
     }
 
-    public void setId(Integer id) {
+    public Customer setId(Integer id) {
         this.id = id;
+        return this;
     }
 
     public String getUid() {
         return uid;
     }
 
-    public void setUid(String uid) {
+    public Customer setUid(String uid) {
         this.uid = uid;
+        return this;
     }
 
     public String getIp() {
         return ip;
     }
 
-    public void setIp(String ip) {
+    public Customer setIp(String ip) {
         this.ip = ip;
+        return this;
     }
 
     public String getProvince() {
         return province;
     }
 
-    public void setProvince(String province) {
+    public Customer setProvince(String province) {
         this.province = province;
+        return this;
     }
 
     public String getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public Customer setCity(String city) {
         this.city = city;
+        return this;
     }
 
     public Integer getGender() {
         return gender;
     }
 
-    public void setGender(Integer gender) {
+    public Customer setGender(Integer gender) {
         this.gender = gender;
+        return this;
     }
 
     public Integer getAge() {
         return age;
     }
 
-    public void setAge(Integer age) {
+    public Customer setAge(Integer age) {
         this.age = age;
+        return this;
     }
 
     public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public Customer setCreateTime(String createTime) {
         this.createTime = createTime;
+        return this;
     }
 
     @Override

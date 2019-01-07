@@ -1,12 +1,13 @@
-﻿localhost = "http://118.25.22.19:8080/";
+﻿// localhost = "http://118.25.22.19:8080/";
+// wsAddress = "118.25.22.19:8080"
+localhost = "http://localhost:8080/";
+wsAddress = "localhost:8080"
 uid = '';
 province = '';
 city = '';
 gender = '';
 age = '';
 socket = '';
-
-// localhost = "http://localhost:8080/";
 
 $(document).ready(
     userInfo()
@@ -121,6 +122,7 @@ function match(size) {
 
                         $('#match_user_info').text('匹配取消');
                     }
+
                 } else {
                     if (size == 0) {
                         $('#match-button').text("重新匹配");
@@ -135,6 +137,7 @@ function match(size) {
                         $('#collapse-nav').collapse('close')
                     }
                     var json = data.content;
+                    gender = json.gender;
                     age = json.age;
                     uid = json.uid;
                     province = json.province;
@@ -165,7 +168,7 @@ function match(size) {
 
 function open() {
     // 创建一个Socket实例
-    socket = new WebSocket('ws://118.25.22.19:8080/websocket/' + uid);
+    socket = new WebSocket('ws://' + wsAddress + '/websocket/' + uid);
     // 打开Socket
     socket.onopen = function (event) {
         // 监听消息
@@ -175,7 +178,6 @@ function open() {
     };
     // 监听Socket的关闭
     socket.onclose = function (event) {
-
         $('#msgs').text('');
         $('#match_user_info').text('聊天已结束');
     };
@@ -215,8 +217,7 @@ function SendMsg() {
     var text = document.getElementById("text");
     if (text.value == "" || text.value == null) {
         // alert("发送信息为空，请输入！");
-    }
-    else {
+    } else {
         if (socket != '' && socket.readyState == 1) {
             AddMsg('default', SendMsgDispose(text.value));
             send(text.value);
@@ -253,6 +254,7 @@ function AddMsg(user, content) {
 
 // 生成内容
 function CreadMsg(user, content, time) {
+
     var str = "";
     if (user == 'default') {
         str = "<div class=\"msg guest\" id=\"" + time + "\"><div class=\"msg-right\"><div class=\"msg-host headDefault\"></div><div class=\"msg-ball\" title=\"\">" + content + "</div></div></div>"

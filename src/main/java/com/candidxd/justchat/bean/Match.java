@@ -18,40 +18,45 @@ public class Match {
         return id;
     }
 
-    public void setId(Integer id) {
+    public Match setId(Integer id) {
         this.id = id;
+        return this;
     }
 
     public String getCustomerUid1() {
         return customerUid1;
     }
 
-    public void setCustomerUid1(String customerUid1) {
+    public Match setCustomerUid1(String customerUid1) {
         this.customerUid1 = customerUid1;
+        return this;
     }
 
     public String getCustomerUid2() {
         return customerUid2;
     }
 
-    public void setCustomerUid2(String customerUid2) {
+    public Match setCustomerUid2(String customerUid2) {
         this.customerUid2 = customerUid2;
+        return this;
     }
 
     public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public Match setCreateTime(String createTime) {
         this.createTime = createTime;
+        return this;
     }
 
     public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(String endTime) {
+    public Match setEndTime(String endTime) {
         this.endTime = endTime;
+        return this;
     }
 
     @Override

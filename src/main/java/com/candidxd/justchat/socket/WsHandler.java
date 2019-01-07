@@ -1,11 +1,12 @@
 package com.candidxd.justchat.socket;
 
-import com.candidxd.justchat.bean.Customer;
-import com.candidxd.justchat.bean.CustomerStatus;
-import com.candidxd.justchat.bean.Match;
+import com.candidxd.justchat.bean.*;
+import com.candidxd.justchat.logger.BussAnnotation;
+import com.candidxd.justchat.rabbitmq.Receiver;
+import com.candidxd.justchat.rabbitmq.Sender;
 import com.candidxd.justchat.service.CustomerStatusService;
 import com.candidxd.justchat.service.MatchService;
-import com.candidxd.justchat.util.DateTimeUtil;
+import com.candidxd.justchat.util.ThreadPoolUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -13,14 +14,6 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
-import org.springframework.web.socket.handler.TextWebSocketHandler;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.websocket.Session;
-import javax.websocket.server.PathParam;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author yzk
@@ -36,66 +29,92 @@ public class WsHandler extends AbstractWebSocketHandler {
     private MatchService matchService;
     @Autowired
     private CustomerStatusService customerStatusService;
-    public Map<String, WebSocketSession> map = new ConcurrentHashMap<>();
-    private String uid1;
-    private String uid2;
 
+    private TalkerPool talkerPool = TalkerPool.getTalkerPool();
+
+    /**
+     * WebSocket关闭
+     *
+     * @param session : session
+     * @param status  : status
+     * @return void
+     * @author yaozekai
+     * @date 2019-01-08 01:35
+     */
+    @BussAnnotation(moduleName = "WebSocket", option = "WebSocket关闭")
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         super.afterConnectionClosed(session, status);
+        String uuid = session.getUri().toString().substring(11);
+        Talker talker = talkerPool.get(uuid);
         String string = session.getUri().toString();
         Customer customer = new Customer();
-        customer.setUid(uid1);
+        customer.setUid(talkerPool.get(uuid).getUid1());
         Match match = matchService.match(customer);
         if (match != null) {
-            match.setEndTime(DateTimeUtil.now());
-            matchService.update(match);
-            CustomerStatus o = new CustomerStatus();
-            o.setCustomerUid(string.substring(11));
-            CustomerStatus customerStatus = customerStatusService.getOne(o);
-            customerStatus.setStateId(1);
-            customerStatus.setState("在线");
+            matchService.delete(match);
+            CustomerStatus customerStatus = customerStatusService.getOne(new CustomerStatus().setCustomerUid(string.substring(11)));
+            customerStatus.setStateId(1).setState("在线");
             customerStatusService.update(customerStatus);
-            WebSocketSession s = map.get(string.substring(11));
-            s.close();
-            o.setCustomerUid(s.getUri().toString().substring(11));
-            customerStatus = customerStatusService.getOne(o);
-            customerStatus.setStateId(1);
-            customerStatus.setState("在线");
+            talker.getSender().sendMessage(talker.getUid1() + "close");
+            customerStatus = customerStatusService.getOne(new CustomerStatus().setCustomerUid(talker.getUid2()));
+            customerStatus.setStateId(1).setState("在线");
             customerStatusService.update(customerStatus);
+            // talkerPool.get(uuid).getSender().close();
+            // talkerPool.get(talkerPool.get(uuid).getUid2()).getSender().close();
+            talkerPool.get(uuid).getReceiver().close();
+            // talkerPool.get(talkerPool.get(uuid).getUid2()).getReceiver().close();
+            // talkerPool.del(talkerPool.get(uuid).getUid2());
+            // talkerPool.del(uuid);
             System.out.println("close....");
         }
     }
 
+    /**
+     * WebSocket连接成功
+     *
+     * @param session : session
+     * @return void
+     * @author yaozekai
+     * @date 2019-01-08 01:36
+     */
+    @BussAnnotation(moduleName = "WebSocket", option = "WebSocket连接成功")
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        super.afterConnectionEstablished(session);
-        System.out.println("建立新的会话s");
         String s = session.getUri().toString();
-        synchronized (this) {
-            uid1 = s.substring(11);
-            Customer customer = new Customer();
-            customer.setUid(uid1);
-            Match match = matchService.match(customer);
-            if (match.getCustomerUid1().equals(uid1)) {
-                uid2 = match.getCustomerUid2();
-            } else {
-                uid2 = match.getCustomerUid1();
-            }
-            map.put(uid2, session);
+
+        Talker talker = new Talker();
+        talker.setUid1(s.substring(11));
+        // synchronized (this) {
+        Match match = matchService.match(new Customer().setUid(s.substring(11)));
+        if (match.getCustomerUid1().equals(talker.getUid1())) {
+            talker.setUid2(match.getCustomerUid2());
+        } else {
+            talker.setUid2(match.getCustomerUid1());
         }
+        talker.setSender(new Sender(talker.getUid1()));
+        talker.setReceiver(new Receiver(talker.getUid2(), session));
+        talker.setSession(session);
+        talkerPool.put(talker);
+        ThreadPoolUtil.threadStartRunnable(talker.getReceiver());
+        // }
     }
 
+    /**
+     * WebSocket消息接收
+     *
+     * @param session : session
+     * @param message : message
+     * @return void
+     * @author yaozekai
+     * @date 2019-01-08 01:37
+     */
+    @BussAnnotation(moduleName = "WebSocket", option = "WebSocket消息接收")
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        TextMessage msg = new TextMessage(message.getPayload());
-        String string = session.getUri().toString();
-        WebSocketSession s = map.get(string.substring(11));
-        System.out.println(message.getPayload());
-//        WebSocketSession s2 = map.get(uid1);
-        System.out.println(s.getUri());
-        s.sendMessage(msg);
-//        s2.sendMessage(msg);
+        String uuid = session.getUri().toString().substring(11);
+        String msg = message.getPayload();
+        talkerPool.get(uuid).getSender().sendMessage(msg);
     }
 
     @Override

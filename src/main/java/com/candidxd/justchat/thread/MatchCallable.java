@@ -1,15 +1,7 @@
 package com.candidxd.justchat.thread;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.candidxd.justchat.bean.Customer;
-import com.candidxd.justchat.bean.CustomerStatus;
-import com.candidxd.justchat.bean.Match;
-import com.candidxd.justchat.enums.ReturnEnum;
-import com.candidxd.justchat.util.DateTimeUtil;
-import com.candidxd.justchat.util.JsonUtil;
+import com.candidxd.justchat.service.MatchService;
 
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -20,28 +12,45 @@ import java.util.concurrent.locks.ReentrantLock;
  * @Description: TODO
  * @date 2018/9/3012:41 PM
  */
+
 public class MatchCallable implements Callable {
+
+    private MatchService matchService;
+
     private MatchHandler matchHandler;
 
     private String name;
 
     private ReentrantLock lock;
 
-    public void setName(String name) {
+    public MatchCallable setName(String name) {
         this.name = name;
+        return this;
     }
 
-    public MatchCallable(MatchHandler matchHandler, ReentrantLock lock) {
+    public MatchCallable(MatchHandler matchHandler, ReentrantLock lock, MatchService matchService) {
         this.matchHandler = matchHandler;
         this.lock = lock;
+        this.matchService = matchService;
     }
 
     @Override
     public String call() throws Exception {
         System.out.println(Thread.currentThread().getName());
+        long before = System.currentTimeMillis();
         String data = null;
         while (data == null) {
             data = matchHandler.run(name, lock);
+            // if (data == null) {
+            //     while (matchService.match(new Customer().setUid(name)) == null) {
+            //         try {
+            //             System.out.println("线程:" + name + "     sleep");
+            //             Thread.sleep(10);
+            //         } catch (InterruptedException e) {
+            //             e.printStackTrace();
+            //         }
+            //     }
+            // }
             try {
                 System.out.println("线程:" + name + "     sleep");
                 Thread.sleep(100);
@@ -49,10 +58,9 @@ public class MatchCallable implements Callable {
                 e.printStackTrace();
             }
         }
-        if (data != null) {
-            System.out.println("线程:" + name + "     跳出循环");
-            return data;
-        }
-        return null;
+        long after = System.currentTimeMillis();
+        System.out.println("线程:" + name + "     执行了  ：   " + String.valueOf((after - before) / 1000) + " s");
+        System.out.println("线程:" + name + "     跳出循环");
+        return data;
     }
 }

@@ -83,6 +83,16 @@ spring:
         min-idle: 0
   session:
     store-type: none
+
+
+#  rabbitmq:
+#    host: localhost
+#    port: 5672
+#    username: admin
+#    password: 123456
+#    publisher-confirms: true
+#    virtual-host: /
+
 #配置日志
 logging:
   #配置日志文件路径

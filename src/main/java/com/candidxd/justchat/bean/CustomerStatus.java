@@ -22,49 +22,46 @@ public class CustomerStatus {
         return id;
     }
 
-    public void setId(Integer id) {
+    public CustomerStatus setId(Integer id) {
         this.id = id;
+        return this;
     }
 
     public String getCustomerUid() {
         return customerUid;
     }
 
-    public void setCustomerUid(String customerUid) {
+    public CustomerStatus setCustomerUid(String customerUid) {
         this.customerUid = customerUid;
+        return this;
     }
 
     public String getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public CustomerStatus setState(String state) {
         this.state = state;
+        return this;
     }
 
     public Integer getStateId() {
         return stateId;
     }
 
-    public void setStateId(Integer stateId) {
+    public CustomerStatus setStateId(Integer stateId) {
         this.stateId = stateId;
+        return this;
     }
 
     public String getLoginTime() {
         return loginTime;
     }
 
-    public void setLoginTime(String loginTime) {
+    public CustomerStatus setLoginTime(String loginTime) {
         this.loginTime = loginTime;
+        return this;
     }
-
-//    public Integer getCustomerGender() {
-//        return customerGender;
-//    }
-//
-//    public void setCustomerGender(Integer customerGender) {
-//        this.customerGender = customerGender;
-//    }
 
     @Override
     public String toString() {
